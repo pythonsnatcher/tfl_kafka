@@ -1,0 +1,19 @@
+# docker/Dockerfile.producer
+
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy source code
+COPY data_fetcher/ ./data_fetcher/
+COPY kafka/producer.py .
+COPY kafka/bus_producer.py .
+
+# Default command (can be overridden in docker-compose)
+CMD ["python", "producer.py"]
+
+ENV KAFKA_BOOTSTRAP_SERVERS=kafka:9092
